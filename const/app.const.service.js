@@ -1,7 +1,7 @@
 /**
  * Default sever listening port
  */
-exports.LISTENING_PORT = 8080;
+exports.LISTENING_PORT = 80;
 
 /**
  * Mongo DB connection
