@@ -37,4 +37,4 @@ class PubSubService {
 
 }
 
-exports = PubSubService;
+exports.default = PubSubService;

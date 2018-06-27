@@ -56,4 +56,4 @@ class SecurityService {
 
 }
 
-exports = SecurityService;
+exports.default = SecurityService;
