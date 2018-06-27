@@ -1,6 +1,8 @@
+const uuidv1 = require('uuid/v1');
 const Dal = require('../core/app.service.dal');
 const DalConst = require('../../const/app.const.dal');
-const Model = require('../../model/dal/app.model.dal.user')
+const SecurityService = require('../../services/business/app.service.security');
+const PlanetDefenderCore = require('planet-defender-core');
 
 class UserService {
 
@@ -25,13 +27,19 @@ class UserService {
     /**
      * Creates a new user
      */
-    createUser(email) {
+    register(email, password) {
         return this.service
             .connect()
             .then(function (database) {
 
+                // create hash
+                const security = new SecurityService();
+
+                // salt
+                const salt = uuidv1();
+
                 // create user
-                const user = new Model.User(null, email);
+                const user = new PlanetDefenderCore.User(email, security.encrypt(password, salt), salt);
 
                 // insert to database
                 database.collection(DalConst.DAL_USERS_COLLECTION).insertOne(user);
@@ -40,13 +48,6 @@ class UserService {
 
             });
     }
-
-    /**
-     * Creates a new user
-     */
-    // module.updateUser(email) {
-
-    // }
 
     /**
      * Deletes the specified user

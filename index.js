@@ -1,29 +1,33 @@
-// consts
-const BASE_URL_SERVICE = '/api/v1';
-
 // requires
 const express = require('express');
-const serviceConst = require('./const/app.const.service');
 const bodyParser = require('body-parser');
+const serviceConst = require('./const/app.const.service');
 
 // services
 const app = express();
-const Dal = require('./services/business/app.service.user');
+const UserService = require('./services/business/app.service.user');
 const jsonParser = bodyParser.json(); //app.use(bodyParser.json());
 
 app.listen(serviceConst.LISTENING_PORT, (err) => {
-  // if (err) {
-  //   return console.log('something bad happened', err)
-  // }
+  if (err) {
+    return console.log('Error starting server: ', err)
+  }
 
-  // console.log(`server is listening on ${socketConst.LISTENING_PORT}`)
+  console.log(`Server listening on ${serviceConst.LISTENING_PORT}`)
 })
+
+/**
+ * Base default
+ */
+app.get('/', function (req, res, next) {
+  res.write('Planet defender server is on.');
+});
 
 /**
  * Users, Retrieve all users 
  */
-app.get(BASE_URL_SERVICE + '/users', function (req, res, next) {
-  const service = new Dal.UserService();
+app.get(serviceConst.BASE_URL_SERVICE + '/users', function (req, res, next) {
+  const service = new UserService();
   return service.getAllUsers()
     .then(function (items) {
       service.dispose();
@@ -41,11 +45,11 @@ app.get(BASE_URL_SERVICE + '/users', function (req, res, next) {
 /**
  * Users, Create 
  */
-app.post(BASE_URL_SERVICE + '/users', jsonParser, function (req, res, next) {
+app.post(serviceConst.BASE_URL_SERVICE + '/users', jsonParser, function (req, res, next) {
   var id = req.body.id;
   var email = req.body.email;
 
-  const service = new Dal.UserService();
+  const service = new UserService();
   return service.createUser(email)
     .then(function (user) {
       service.dispose();
@@ -63,10 +67,10 @@ app.post(BASE_URL_SERVICE + '/users', jsonParser, function (req, res, next) {
 /**
  * Users, Delete 
  */
-app.delete(BASE_URL_SERVICE + '/users/:id', function (req, res, next) {
+app.delete(serviceConst.BASE_URL_SERVICE + '/users/:id', function (req, res, next) {
   var id = req.params.id;
 
-  const service = new Dal.UserService();
+  const service = new UserService();
   return service.deleteUser(id)
     .then(function () {
       service.dispose();

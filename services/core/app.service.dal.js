@@ -44,4 +44,4 @@ class DatabaseService {
 
 }
 
-exports.DatabaseService = DatabaseService;
+exports = DatabaseService;
