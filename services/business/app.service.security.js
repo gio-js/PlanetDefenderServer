@@ -17,7 +17,7 @@ class SecurityService {
     authenticate(email, password) {
         return this.service
             .connect()
-            .then(function (database) {
+            .then((database) => {
 
                 let authenticated = false;
 
