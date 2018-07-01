@@ -44,10 +44,10 @@ class UsersController {
       return service
         .getAllUsers()
         .then(function(items) {
-            console.log(items);
+            //console.log(items);
           service.dispose();
 
-          return response.json(items);
+          //return response.json(items);
         })
         .catch(function(error) {
           service.dispose();
