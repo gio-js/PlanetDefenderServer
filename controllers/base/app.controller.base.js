@@ -21,7 +21,7 @@ const BaseController = {
 
         return function(request, response, next) {
             // do authentication stuffs
-            var token = req.body.token || req.query.token || req.headers['x-access-token'];
+            var token = request.body.token || request.query.token || request.headers['x-access-token'];
 
             // verifies secret and checks exp
             jwt.verify(token, serviceConst.AUTH_TOKEN_SECRET, function(err, decoded) {      
@@ -29,7 +29,7 @@ const BaseController = {
                     return res.json({ success: false, message: 'Failed to authenticate token.' });    
                 } else {
                     // if everything is good, save to request for use in other routes
-                    req.decoded = decoded;    
+                    request.decoded = decoded;    
                     next();
                 }
             });

@@ -15,8 +15,8 @@ class UsersController {
      * Users, Create
      */
     apiRoutes.post("/users/register", jsonParser, BaseController.Instance.processAnonymous((request, response, next) => {
-        var email = req.body.email;
-        var password = req.body.password;
+        var email = request.body.email;
+        var password = request.body.password;
   
         const service = new UserService.Class();
         const security = new SecurityService.Class();
@@ -26,7 +26,7 @@ class UsersController {
           .then(function(user) {
             service.dispose();
   
-            return res.json(security.generateTokenInfo(user));
+            return response.json(security.generateTokenInfo(user));
           })
           .catch(function(error) {
             service.dispose();
@@ -46,7 +46,7 @@ class UsersController {
         .then(function(items) {
           service.dispose();
 
-          return res.json(items);
+          return response.json(items);
         })
         .catch(function(error) {
           service.dispose();
@@ -59,7 +59,7 @@ class UsersController {
      * Users, Delete
      */
     apiRoutes.delete("/users/:id", BaseController.Instance.processWithAuthentication((request, response, next) => {
-      var id = req.params.id;
+      var id = request.params.id;
 
       const service = new UserService.Class();
       return service
@@ -67,7 +67,7 @@ class UsersController {
         .then(function() {
           service.dispose();
 
-          return res.json(true);
+          return response.json(true);
         })
         .catch(function(error) {
           service.dispose();

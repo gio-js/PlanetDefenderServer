@@ -14,8 +14,8 @@ class AuthenticationController {
      * Users, Create
      */
     apiRoutes.post("/authentication/login", jsonParser, BaseController.Instance.processAnonymous((request, response, next) => {
-        var email = req.body.email;
-        var password = req.body.password;
+        var email = request.body.email;
+        var password = request.body.password;
   
         const service = new SecurityService();
         return security
@@ -23,7 +23,7 @@ class AuthenticationController {
           .then(function(authInfo) {
             service.dispose();
   
-            return res.json(authInfo);
+            return response.json(authInfo);
           })
           .catch(function(error) {
             service.dispose();
@@ -42,7 +42,7 @@ class AuthenticationController {
         .then(function(items) {
           service.dispose();
 
-          return res.json(items);
+          return response.json(items);
         })
         .catch(function(error) {
           service.dispose();
@@ -55,7 +55,7 @@ class AuthenticationController {
      * Users, Delete
      */
     apiRoutes.delete("/users/:id", BaseController.Instance.processWithAuthentication((request, response, next) => {
-      var id = req.params.id;
+      var id = request.params.id;
 
       const service = new UserService();
       return service
@@ -63,7 +63,7 @@ class AuthenticationController {
         .then(function() {
           service.dispose();
 
-          return res.json(true);
+          return response.json(true);
         })
         .catch(function(error) {
           service.dispose();
