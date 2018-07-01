@@ -26,7 +26,8 @@ const BaseController = {
             // verifies secret and checks exp
             jwt.verify(token, serviceConst.AUTH_TOKEN_SECRET, function(err, decoded) {      
                 if (err) {
-                    return res.json({ success: false, message: 'Failed to authenticate token.' });    
+                    response.send(401);
+                    return response.json({ success: false, message: 'Failed to authenticate token.' });    
                 } else {
                     // if everything is good, save to request for use in other routes
                     request.decoded = decoded;    
