@@ -24,23 +24,24 @@ class SecurityService {
                 let authenticated = false;
 
                 // Insert a single document
-                const user = database.collection(DalConst.DAL_USERS_COLLECTION).findOne({ 'Email': email });
-                console.log(user);
+                return database.collection(DalConst.DAL_USERS_COLLECTION).findOne({ 'Email': email }).then(user => {
+                    console.log(user);
 
-                if (user) {
+                    if (user) {
 
-                    const encryptedPassword = this.encrypt(password, user.Salt);
-                    if (user.PasswordHash === encryptedPassword) {
-                        authenticated = true;
+                        const encryptedPassword = this.encrypt(password, user.Salt);
+                        if (user.PasswordHash === encryptedPassword) {
+                            authenticated = true;
+                        }
+
                     }
 
-                }
+                    if (!authenticated) {
+                        throw new Error('Authentication failed');
+                    }
 
-                if (!authenticated) {
-                    throw new Error('Authentication failed');
-                }
-
-                return this.generateTokenInfo(user);
+                    return this.generateTokenInfo(user);
+                });
 
             });
     }
