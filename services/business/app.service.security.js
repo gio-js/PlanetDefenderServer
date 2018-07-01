@@ -25,7 +25,7 @@ class SecurityService {
                 const user = database.collection(DalConst.DAL_USERS_COLLECTION).findOne({ 'Email': email });
                 if (user) {
 
-                    const encryptedPassword = this.encrypt(password, user.salt);
+                    const encryptedPassword = this.encrypt(password, user.Salt);
                     if (user.PasswordHash === encryptedPassword) {
                         authenticated = true;
                     }
