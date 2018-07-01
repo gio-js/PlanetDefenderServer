@@ -3,6 +3,7 @@ const jsonParser = bodyParser.json();
 
 const BaseController = require("./base/app.controller.base");
 const UserService = require('../services/business/app.service.user');
+const SecurityService = require('../services/business/app.service.security');
 
 class UsersController {
   constructor() {}
@@ -14,19 +15,22 @@ class UsersController {
      * Users, Create
      */
     apiRoutes.post("/users/register", jsonParser, BaseController.Instance.processAnonymous((request, response, next) => {
-        var id = req.body.id;
         var email = req.body.email;
+        var password = req.body.password;
   
         const service = new UserService.Class();
+        const security = new SecurityService.Class();
+        
         return service
-          .createUser(email)
+          .register(email, password)
           .then(function(user) {
             service.dispose();
   
-            return res.json(user);
+            return res.json(security.generateTokenInfo(user));
           })
           .catch(function(error) {
             service.dispose();
+            security.dispose();
   
             return next(error);
           });

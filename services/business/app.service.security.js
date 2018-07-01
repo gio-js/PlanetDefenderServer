@@ -36,17 +36,24 @@ class SecurityService {
                     throw new Error('Authentication failed');
                 }
 
-                var token = jwt.sign(payload, serviceConst.AUTH_TOKEN_SECRET, {
-                    expiresInMinutes: serviceConst.AUTH_TOKEN_EXPIRATION_TIME
-                });
-
-                const authInfo = new PlanetDefenderCore.AuthenticationInfo();
-                authInfo.UserId = user._id;
-                authInfo.UserName = user.UserName;
-                authInfo.AuthenticationToken = token;
-                return authInfo;
+                return this.generateTokenInfo(user);
 
             });
+    }
+
+    /**
+     * Generated token info for client requests
+     */
+    generateTokenInfo(user) {
+        var token = jwt.sign(payload, serviceConst.AUTH_TOKEN_SECRET, {
+            expiresInMinutes: serviceConst.AUTH_TOKEN_EXPIRATION_TIME
+        });
+
+        const authInfo = new PlanetDefenderCore.AuthenticationInfo();
+        authInfo.UserId = user._id;
+        authInfo.UserName = user.UserName;
+        authInfo.AuthenticationToken = token;
+        return authInfo;
     }
 
     /**
