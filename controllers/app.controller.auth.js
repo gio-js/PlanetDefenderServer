@@ -32,45 +32,6 @@ class AuthenticationController {
           });
       }));
 
-    /**
-     * Users, Retrieve all users
-     */
-    apiRoutes.get("/users", BaseController.Instance.processWithAuthentication((request, response, next) => {
-      const service = new UserService();
-      return service
-        .getAllUsers()
-        .then(function(items) {
-          service.dispose();
-
-          return response.json(items);
-        })
-        .catch(function(error) {
-          service.dispose();
-
-          return next(error);
-        });
-    }));
-
-    /**
-     * Users, Delete
-     */
-    apiRoutes.delete("/users/:id", BaseController.Instance.processWithAuthentication((request, response, next) => {
-      var id = request.params.id;
-
-      const service = new UserService();
-      return service
-        .deleteUser(id)
-        .then(function() {
-          service.dispose();
-
-          return response.json(true);
-        })
-        .catch(function(error) {
-          service.dispose();
-
-          return next(error);
-        });
-    }));
   }
 }
 
