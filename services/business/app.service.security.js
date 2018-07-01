@@ -45,6 +45,10 @@ class SecurityService {
      * Generated token info for client requests
      */
     generateTokenInfo(user) {
+        const payload = {
+            admin: user.UserName 
+        };
+
         var token = jwt.sign(payload, serviceConst.AUTH_TOKEN_SECRET, {
             expiresInMinutes: serviceConst.AUTH_TOKEN_EXPIRATION_TIME
         });
