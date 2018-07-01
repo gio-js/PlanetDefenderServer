@@ -17,7 +17,7 @@ class AuthenticationController {
         var email = request.body.email;
         var password = request.body.password;
   
-        const service = new SecurityService();
+        const service = new SecurityService.Class();
         return security
           .authenticate(email, password)
           .then(function(authInfo) {

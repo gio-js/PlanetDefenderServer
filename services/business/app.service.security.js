@@ -76,4 +76,4 @@ class SecurityService {
 
 }
 
-exports.SecurityService = SecurityService;
+exports.Class = SecurityService;

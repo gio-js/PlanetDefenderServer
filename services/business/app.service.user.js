@@ -33,7 +33,7 @@ class UserService {
             .then(function (database) {
 
                 // create hash
-                const security = new SecurityService();
+                const security = new SecurityService.Class();
 
                 // salt
                 const salt = uuidv1();
