@@ -39,7 +39,7 @@ class UsersController {
     /**
      * Users, Retrieve all users
      */
-    apiRoutes.get("/users", BaseController.Instance.processWithAuthentication((request, response, next) => {
+    apiRoutes.get("/users", jsonParser, BaseController.Instance.processWithAuthentication((request, response, next) => {
       const service = new UserService.Class();
       return service
         .getAllUsers()
@@ -58,7 +58,7 @@ class UsersController {
     /**
      * Users, Delete
      */
-    apiRoutes.delete("/users/:id", BaseController.Instance.processWithAuthentication((request, response, next) => {
+    apiRoutes.delete("/users/:id", jsonParser, BaseController.Instance.processWithAuthentication((request, response, next) => {
       var id = request.params.id;
 
       const service = new UserService.Class();
