@@ -1,0 +1,11 @@
+const express = require('express');
+const router = express.Router();
+const bodyParser = require('body-parser');
+
+router.use(bodyParser.urlencoded({ extended: true }));
+router.use(bodyParser.json());
+
+
+// CREATES A NEW USER
+// router.post('/', function (req, res) {
+// }

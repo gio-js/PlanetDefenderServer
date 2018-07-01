@@ -33,7 +33,17 @@ class SecurityService {
                     throw new Error('Authentication failed');
                 }
 
+                return authenticated;
+
             });
+    }
+
+    /**
+     * Generates a new authentication token in order to authenticate
+     * http client requests
+     */
+    generateAuthenticationToken() {
+
     }
 
     /**
