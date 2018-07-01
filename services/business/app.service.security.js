@@ -50,7 +50,7 @@ class SecurityService {
         };
 
         var token = jwt.sign(payload, serviceConst.AUTH_TOKEN_SECRET, {
-            expiresInMinutes: serviceConst.AUTH_TOKEN_EXPIRATION_TIME
+            expiresIn: serviceConst.AUTH_TOKEN_EXPIRATION_TIME
         });
 
         const authInfo = new PlanetDefenderCore.AuthenticationInfo();

@@ -31,4 +31,4 @@ exports.AUTH_TOKEN_SECRET = process.env.AUTH_TOKEN_SECRET;
 /**
  * Authentication token expiration
  */
-exports.AUTH_TOKEN_EXPIRATION_TIME = 3600;
+exports.AUTH_TOKEN_EXPIRATION_TIME = 1800; // 30 min.
