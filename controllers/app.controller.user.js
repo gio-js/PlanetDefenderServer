@@ -39,7 +39,7 @@ class UsersController {
     /**
      * Users, Retrieve all users
      */
-    apiRoutes.get("/users/getall", jsonParser, BaseController.Instance.processWithAuthentication((request, response, next) => {
+    apiRoutes.get("/users", jsonParser, BaseController.Instance.processWithAuthentication((request, response, next) => {
       const service = new UserService.Class();
       return service
         .getAllUsers()
@@ -48,6 +48,7 @@ class UsersController {
           service.dispose();
 
           //return response.json(items);
+          return items;
         })
         .catch(function(error) {
           service.dispose();
