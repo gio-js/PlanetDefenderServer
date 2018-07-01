@@ -15,6 +15,8 @@ class SecurityService {
      * Creates a new user
      */
     authenticate(email, password) {
+        console.log(email);
+        console.log(password);
         return this.service
             .connect()
             .then((database) => {
@@ -23,6 +25,8 @@ class SecurityService {
 
                 // Insert a single document
                 const user = database.collection(DalConst.DAL_USERS_COLLECTION).findOne({ 'Email': email });
+                console.log(user);
+
                 if (user) {
 
                     const encryptedPassword = this.encrypt(password, user.Salt);
