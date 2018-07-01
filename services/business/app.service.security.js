@@ -22,7 +22,7 @@ class SecurityService {
                 let authenticated = false;
 
                 // Insert a single document
-                const user = database.collection(DalConst.DAL_USERS_COLLECTION).find({ 'Email': email }).findOne();
+                const user = database.collection(DalConst.DAL_USERS_COLLECTION).findOne({ 'Email': email });
                 if (user) {
 
                     const encryptedPassword = this.encrypt(password, user.salt);
