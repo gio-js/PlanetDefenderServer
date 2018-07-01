@@ -78,4 +78,4 @@ class UserService {
 
 }
 
-exports.UserService = UserService;
+exports.Class = UserService;

@@ -1,11 +1,74 @@
-const express = require('express');
-const router = express.Router();
-const bodyParser = require('body-parser');
+const BaseController = require("./base/app.controller.base");
+const SecurityService = require('../services/business/app.service.security');
 
-router.use(bodyParser.urlencoded({ extended: true }));
-router.use(bodyParser.json());
+class AuthenticationController {
+  constructor() {}
+
+  register(apiRoutes) {
 
 
-// CREATES A NEW USER
-// router.post('/', function (req, res) {
-// }
+    /**
+     * Users, Create
+     */
+    apiRoutes.post("/authentication/login", jsonParser, BaseController.processAnonymous((request, response, next) => {
+        var email = req.body.email;
+        var password = req.body.password;
+  
+        const service = new SecurityService();
+        return security
+          .authenticate(email, password)
+          .then(function(authInfo) {
+            service.dispose();
+  
+            return res.json(authInfo);
+          })
+          .catch(function(error) {
+            service.dispose();
+  
+            return next(error);
+          });
+      }));
+
+    /**
+     * Users, Retrieve all users
+     */
+    apiRoutes.get("/users", BaseController.processWithAuthentication((request, response, next) => {
+      const service = new UserService();
+      return service
+        .getAllUsers()
+        .then(function(items) {
+          service.dispose();
+
+          return res.json(items);
+        })
+        .catch(function(error) {
+          service.dispose();
+
+          return next(error);
+        });
+    }));
+
+    /**
+     * Users, Delete
+     */
+    apiRoutes.delete("/users/:id", BaseController.processWithAuthentication((request, response, next) => {
+      var id = req.params.id;
+
+      const service = new UserService();
+      return service
+        .deleteUser(id)
+        .then(function() {
+          service.dispose();
+
+          return res.json(true);
+        })
+        .catch(function(error) {
+          service.dispose();
+
+          return next(error);
+        });
+    }));
+  }
+}
+
+exports.Class = AuthenticationController;

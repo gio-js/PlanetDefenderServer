@@ -1,29 +1,48 @@
-class BaseController {
+const serviceConst = require('../../const/app.const.service');
+const jwt = require('jsonwebtoken');
 
-    processAnonymous(request, response, next, businessLogicCallback) {
+const BaseController = {
 
-        // do internal stuff
+    processAnonymous : (businessLogicCallback) => {
 
-        if (businessLogicCallback) {
-            businessLogicCallback(request, response, next);
+        return function(request, response, next) {
+            // do internal stuff
+
+            if (businessLogicCallback) {
+                businessLogicCallback(request, response, next);
+            }
+
+            return null;
         }
 
-        return null;
+    },
 
-    }
+    processWithAuthentication : (businessLogicCallback) => {
 
-    processWithAuthentication(request, response, next, businessLogicCallback) {
+        return function(request, response, next) {
+            // do authentication stuffs
+            var token = req.body.token || req.query.token || req.headers['x-access-token'];
 
-        // do authentication stuffs
+            // verifies secret and checks exp
+            jwt.verify(token, serviceConst.AUTH_TOKEN_SECRET, function(err, decoded) {      
+                if (err) {
+                    return res.json({ success: false, message: 'Failed to authenticate token.' });    
+                } else {
+                    // if everything is good, save to request for use in other routes
+                    req.decoded = decoded;    
+                    next();
+                }
+            });
 
-        if (businessLogicCallback) {
-            return businessLogicCallback(request, response, next);
+            if (businessLogicCallback) {
+                return businessLogicCallback(request, response, next);
+            }
+
+            return null;
         }
-
-        return null;
 
     }
 }
 
 
-exports = BaseController;
+exports.Instance = BaseController;

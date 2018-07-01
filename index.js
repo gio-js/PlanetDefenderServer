@@ -5,8 +5,14 @@ const serviceConst = require('./const/app.const.service');
 
 // services
 const app = express();
-const UserService = require('./services/business/app.service.user');
-const jsonParser = bodyParser.json(); //app.use(bodyParser.json());
+const router = express.Router(); 
+
+router.use(bodyParser.urlencoded({ extended: true }));
+router.use(bodyParser.json());
+
+// controllers
+const UsersController = require('./controllers/app.controller.user');
+const AuthenticationController = require('./controllers/app.controller.auth');
 
 app.listen(serviceConst.LISTENING_PORT, (err) => {
   if (err) {
@@ -24,63 +30,16 @@ app.get('/', function (req, res, next) {
 });
 
 /**
- * Users, Retrieve all users 
+ * Register users routers
  */
-app.get(serviceConst.BASE_URL_SERVICE + '/users', function (req, res, next) {
-  const service = new UserService();
-  return service.getAllUsers()
-    .then(function (items) {
-      service.dispose();
-
-      return res.json(items);
-    })
-    .catch(function (error) {
-      service.dispose();
-
-      return next(error);
-    });
-
-});
+const usersController = new UsersController.Class();
+usersController.register(router);
 
 /**
- * Users, Create 
+ * Register authentication routers
  */
-app.post(serviceConst.BASE_URL_SERVICE + '/users', jsonParser, function (req, res, next) {
-  var id = req.body.id;
-  var email = req.body.email;
+const authController = new AuthenticationController.Class();
+authController.register(router);
 
-  const service = new UserService();
-  return service.createUser(email)
-    .then(function (user) {
-      service.dispose();
 
-      return res.json(user);
-    })
-    .catch(function (error) {
-      service.dispose();
-
-      return next(error);
-    });
-
-});
-
-/**
- * Users, Delete 
- */
-app.delete(serviceConst.BASE_URL_SERVICE + '/users/:id', function (req, res, next) {
-  var id = req.params.id;
-
-  const service = new UserService();
-  return service.deleteUser(id)
-    .then(function () {
-      service.dispose();
-
-      return res.json(true);
-    })
-    .catch(function (error) {
-      service.dispose();
-
-      return next(error);
-    });
-
-});
+app.use(serviceConst.BASE_URL_SERVICE, router);

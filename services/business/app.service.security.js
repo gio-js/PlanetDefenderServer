@@ -1,6 +1,9 @@
 const Dal = require('../core/app.service.dal');
 const DalConst = require('../../const/app.const.dal');
+const serviceConst = require('../../const/app.const.service');
 const sha256 = require('sha256');
+const jwt = require('jsonwebtoken');
+const PlanetDefenderCore = require('planet-defender-core');
 
 class SecurityService {
 
@@ -33,17 +36,17 @@ class SecurityService {
                     throw new Error('Authentication failed');
                 }
 
-                return authenticated;
+                var token = jwt.sign(payload, serviceConst.AUTH_TOKEN_SECRET, {
+                    expiresInMinutes: serviceConst.AUTH_TOKEN_EXPIRATION_TIME
+                });
+
+                const authInfo = new PlanetDefenderCore.AuthenticationInfo();
+                authInfo.UserId = user._id;
+                authInfo.UserName = user.UserName;
+                authInfo.AuthenticationToken = token;
+                return authInfo;
 
             });
-    }
-
-    /**
-     * Generates a new authentication token in order to authenticate
-     * http client requests
-     */
-    generateAuthenticationToken() {
-
     }
 
     /**
@@ -66,4 +69,4 @@ class SecurityService {
 
 }
 
-exports.default = SecurityService;
+exports.SecurityService = SecurityService;
