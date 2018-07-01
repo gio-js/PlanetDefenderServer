@@ -1,4 +1,4 @@
-const Dal = require('../core/app.service.dal');
+const DatabaseService = require('../core/app.service.dal');
 const DalConst = require('../../const/app.const.dal');
 const serviceConst = require('../../const/app.const.service');
 const sha256 = require('sha256');
@@ -8,7 +8,7 @@ const PlanetDefenderCore = require('planet-defender-core');
 class SecurityService {
 
     constructor() {
-        this.service = new Dal.DatabaseService();
+        this.service = new DatabaseService.Class();
     }
 
     /**

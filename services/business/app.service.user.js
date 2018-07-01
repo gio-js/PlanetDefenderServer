@@ -1,5 +1,5 @@
 const uuidv1 = require('uuid/v1');
-const Dal = require('../core/app.service.dal');
+const DatabaseService = require('../core/app.service.dal');
 const DalConst = require('../../const/app.const.dal');
 const SecurityService = require('../../services/business/app.service.security');
 const PlanetDefenderCore = require('planet-defender-core');
@@ -7,7 +7,7 @@ const PlanetDefenderCore = require('planet-defender-core');
 class UserService {
 
     constructor() {
-        this.service = new Dal.DatabaseService();
+        this.service = new DatabaseService.Class();
     }
 
     /**

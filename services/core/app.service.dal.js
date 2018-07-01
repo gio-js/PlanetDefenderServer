@@ -44,4 +44,4 @@ class DatabaseService {
 
 }
 
-exports.default = DatabaseService;
+exports.Class = DatabaseService;
