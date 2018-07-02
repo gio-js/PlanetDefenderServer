@@ -31,7 +31,6 @@ const BaseController = {
                 } else {
                     // if everything is good, save to request for use in other routes
                     request.decoded = decoded;    
-                    next();
                 }
             });
 

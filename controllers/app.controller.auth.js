@@ -28,6 +28,7 @@ class AuthenticationController {
           .catch(function(error) {
             service.dispose();
   
+            response.send(401);
             return next(error);
           });
       }));
