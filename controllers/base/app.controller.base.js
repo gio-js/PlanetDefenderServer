@@ -28,14 +28,15 @@ const BaseController = {
                 if (err) {
                     response.send(401);
                     return response.json({ success: false, message: 'Failed to authenticate token.' });    
-                } else {
-                    // if everything is good, save to request for use in other routes
-                    request.decoded = decoded;    
-                }
+                } 
+                // else {
+                //     // if everything is good, save to request for use in other routes
+                //     request.decoded = decoded;    
+                // }
             });
 
             if (businessLogicCallback) {
-                return businessLogicCallback(request, response, next);
+                businessLogicCallback(request, response, next);
             }
 
             return null;
