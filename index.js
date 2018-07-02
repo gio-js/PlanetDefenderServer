@@ -13,6 +13,7 @@ router.use(bodyParser.json());
 // controllers
 const UsersController = require('./controllers/app.controller.user');
 const AuthenticationController = require('./controllers/app.controller.auth');
+const GameController = require('./controllers/app.controller.game');
 
 app.listen(serviceConst.LISTENING_PORT, (err) => {
   if (err) {
@@ -41,5 +42,10 @@ usersController.register(router);
 const authController = new AuthenticationController.Class();
 authController.register(router);
 
+/**
+ * Register game routers
+ */
+const gameController = new GameController.Class();
+gameController.register(router);
 
 app.use(serviceConst.BASE_URL_SERVICE, router);

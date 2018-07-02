@@ -9,7 +9,7 @@ const SecurityService = require('../services/business/app.service.security');
 const PubSubService = require('../services/core/app.service.pubSub');
 const WebSocketService = require('../services/core/app.service.webSocket');
 
-class UsersController {
+class GameController {
   constructor() {}
 
   register(apiRoutes) {
@@ -57,4 +57,4 @@ class UsersController {
   }
 }
 
-exports.Class = UsersController;
+exports.Class = GameController;
