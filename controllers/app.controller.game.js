@@ -1,8 +1,8 @@
-import { GameArena } from 'planet-defender-core';
 
 const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
 
+const PlanetDefenderCore = require('planet-defender-core');
 const BaseController = require("./base/app.controller.base");
 const UserService = require('../services/business/app.service.user');
 const SecurityService = require('../services/business/app.service.security');
@@ -21,7 +21,7 @@ class GameController {
         var userId = request.params.userId;
 
         // create game arena
-        const arena = new GameArena();
+        const arena = new PlanetDefenderCore.GameArena();
 
         // store it to redis
         const service = new WebSocketService.Class();
