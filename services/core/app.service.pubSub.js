@@ -1,10 +1,12 @@
 const redis = require('redis');
 const serviceConst = require('../../const/app.const.service');
+const { promisify } = require('util');
 
 class PubSubService {
 
     constructor() {
         this.service = redis.createClient(serviceConst.REDIS_URL);
+        this.getAsync = promisify(this.service.get).bind(this.service);
     }
 
     /**
@@ -23,6 +25,20 @@ class PubSubService {
      */
     publish(channelId, message) {
         this.service.publish(channelId, message);
+    }
+
+    /**
+     * Store data by id
+     */
+    store(id, dataObject) {
+        this.service.set(id, JSON.stringify(dataObject));
+    }
+
+    /**
+     * Store data by id
+     */
+    get(id) {
+        return this.getAsync(id);
     }
 
     /**

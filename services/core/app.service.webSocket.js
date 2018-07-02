@@ -55,4 +55,4 @@ class WebSocketService {
 
 }
 
-exports.Class = PubSubService;
+exports.Class = WebSocketService;

@@ -1,11 +1,60 @@
-const express = require('express');
-const router = express.Router();
+import { GameArena } from 'planet-defender-core';
+
 const bodyParser = require('body-parser');
+const jsonParser = bodyParser.json();
 
-router.use(bodyParser.urlencoded({ extended: true }));
-router.use(bodyParser.json());
+const BaseController = require("./base/app.controller.base");
+const UserService = require('../services/business/app.service.user');
+const SecurityService = require('../services/business/app.service.security');
+const PubSubService = require('../services/core/app.service.pubSub');
+const WebSocketService = require('../services/core/app.service.webSocket');
 
+class UsersController {
+  constructor() {}
 
-// CREATES A NEW USER
-// router.post('/', function (req, res) {
-// }
+  register(apiRoutes) {
+
+    /**
+     * Game arena, Create
+     */
+    apiRoutes.get("/game/createArena/:userId", jsonParser, BaseController.Instance.processWithAuthentication((request, response, next) => {
+        var userId = request.params.userId;
+
+        // create game arena
+        const arena = new GameArena();
+
+        // store it to redis
+        const service = new WebSocketService.Class();
+        service.store(arena.Uid, arena);
+
+        // return
+        return response.json(arena);
+    }));
+
+    /**
+     * Game arena, Gets the first available arena not owned by the specified user
+     */
+    apiRoutes.post("/game/searchArena/:userId", jsonParser, BaseController.Instance.processWithAuthentication((request, response, next) => {
+       
+    }));
+
+    /**
+     * Join the specified arena
+     */
+    apiRoutes.post("/game/joinArena/:arenaId", jsonParser, BaseController.Instance.processWithAuthentication((request, response, next) => {
+       
+    }));
+
+    /**
+     * Join the specified arena
+     */
+    apiRoutes.post("/game/notifyCommand", jsonParser, BaseController.Instance.processWithAuthentication((request, response, next) => {
+        let command = request.body.command;
+       
+    }));
+
+    
+  }
+}
+
+exports.Class = UsersController;

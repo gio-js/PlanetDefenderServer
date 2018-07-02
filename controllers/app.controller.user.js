@@ -44,7 +44,6 @@ class UsersController {
       return service
         .getAllUsers()
         .then(function(items) {
-          console.log(JSON.stringify(items));
           service.dispose();
 
           return response.json(items);
