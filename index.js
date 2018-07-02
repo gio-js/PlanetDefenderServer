@@ -2,10 +2,13 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const serviceConst = require('./const/app.const.service');
+const webSocket = require('./services/core/app.service.webSocket');
+const http = require('http');
 
 // services
 const app = express();
 const router = express.Router(); 
+const httpServer = http.Server(app);
 
 router.use(bodyParser.urlencoded({ extended: true }));
 router.use(bodyParser.json());
@@ -15,13 +18,11 @@ const UsersController = require('./controllers/app.controller.user');
 const AuthenticationController = require('./controllers/app.controller.auth');
 const GameController = require('./controllers/app.controller.game');
 
-app.listen(serviceConst.LISTENING_PORT, (err) => {
-  if (err) {
-    return console.log('Error starting server: ', err)
-  }
-
-  console.log(`Server listening on ${serviceConst.LISTENING_PORT}`)
-})
+/**
+ * Websocket
+ */
+const ws = new webSocket.Class(httpServer);
+ws.createChannel('test');
 
 /**
  * Base default
@@ -49,3 +50,7 @@ const gameController = new GameController.Class();
 gameController.register(router);
 
 app.use(serviceConst.BASE_URL_SERVICE, router);
+
+httpServer.listen(serviceConst.LISTENING_PORT, function(){
+  console.log('listening on *:' + serviceConst.LISTENING_PORT);
+});

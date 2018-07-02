@@ -24,7 +24,7 @@ class GameController {
         const arena = new PlanetDefenderCore.GameArena();
 
         // store it to redis
-        const service = new WebSocketService.Class();
+        const service = new PubSubService.Class();
         service.store(arena.Uid, arena);
 
         // return

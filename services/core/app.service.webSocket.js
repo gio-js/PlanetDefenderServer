@@ -1,18 +1,18 @@
-const redis = require('redis');
-const serviceConst = require('../../const/app.const.service');
+const socketIO = require('socket.io');
 
 class WebSocketService {
 
     constructor(server) {
         this.service = socketIO(server);
         this.channels = {}; // dictionary of <channelId, io.Namespace>
+        this.messageCallback = null;
     }
 
     /**
      * Create a namespace channel
      */
-    createChannel(channelId, message) {
-        var namespaceChannel = io.of('/' + channelId);
+    createChannel(channelId) {
+        var namespaceChannel = this.service.of('/' + channelId);
         
         // events
         namespaceChannel.on('connection', function (socket) {
@@ -24,6 +24,14 @@ class WebSocketService {
 
             socket.on('disconnect', function (reason) {
                 console.log('socket disconnected: ' + socket.id); // remove closure
+            });
+
+            socket.on('message', (message) => {
+                console.log('Received message ', from);
+
+                if (this.messageCallback) {
+                    this.messageCallback(channelId, message);
+                }
             });
         });
 
@@ -43,6 +51,14 @@ class WebSocketService {
     }
 
     /**
+     * Registers the specified callback once a message has been received on socket
+     * callback parameters: channelid, message: WebSocketMessage
+     */
+    onMessage(messageCallback) {
+        this.messageCallback = messageCallback;
+    }
+
+    /**
      * Dispose function, removes any internal resource pointer
      */
     dispose() {
@@ -51,6 +67,7 @@ class WebSocketService {
             this.service = null;
         }
         this.channels = null;
+        this.messageCallback = null;
     }
 
 }
