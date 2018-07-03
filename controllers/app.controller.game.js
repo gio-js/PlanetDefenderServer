@@ -27,7 +27,7 @@ class GameController {
 
         // create game arena
         const arena = new PlanetDefenderCore.GameArena();
-        arena.Randomize();
+        arena.Randomize(userId);
 
         // store it to redis
         const service = new PubSubService.Class();
@@ -81,6 +81,10 @@ class GameController {
      */
     apiRoutes.post("/game/notifyCommand", jsonParser, BaseController.Instance.processWithAuthentication((request, response, next) => {
         let command = request.body.command;
+
+        // manage command collisions
+
+        // send accepted or rejected by web socket
        
     }));
 
