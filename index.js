@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const serviceConst = require('./const/app.const.service');
 const webSocket = require('./services/core/app.service.webSocket');
 const http = require('http');
+const cors = require('cors')
 
 // services
 const app = express();
@@ -49,6 +50,7 @@ authController.register(router);
 const gameController = new GameController.Class();
 gameController.register(router);
 
+app.use(cors());
 app.use(serviceConst.BASE_URL_SERVICE, router);
 
 httpServer.listen(serviceConst.LISTENING_PORT, function(){
