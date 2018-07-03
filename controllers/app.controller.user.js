@@ -15,26 +15,26 @@ class UsersController {
      * Users, Create
      */
     apiRoutes.post("/users/register", jsonParser, BaseController.Instance.processAnonymous((request, response, next) => {
-        var email = request.body.email;
-        var password = request.body.password;
-  
-        const service = new UserService.Class();
-        const security = new SecurityService.Class();
-        
-        return service
-          .register(email, password)
-          .then(function(user) {
-            service.dispose();
-  
-            return response.json(security.generateTokenInfo(user));
-          })
-          .catch(function(error) {
-            service.dispose();
-            security.dispose();
-  
-            return next(error);
-          });
-      }));
+      var email = request.body.email;
+      var password = request.body.password;
+
+      const service = new UserService.Class();
+      const security = new SecurityService.Class();
+      
+      return service
+        .register(email, password)
+        .then(function(user) {
+          service.dispose();
+
+          return response.json(security.generateTokenInfo(user));
+        })
+        .catch(function(error) {
+          service.dispose();
+          security.dispose();
+
+          return next(error);
+        });
+    }));
 
     /**
      * Users, Retrieve all users
