@@ -42,6 +42,13 @@ class PubSubService {
     }
 
     /**
+     * Returns native redis service
+     */
+    getNativeService() {
+        return this.service;
+    }
+
+    /**
      * Dispose function, removes any internal resource pointer
      */
     dispose() {

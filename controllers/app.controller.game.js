@@ -8,9 +8,14 @@ const UserService = require('../services/business/app.service.user');
 const SecurityService = require('../services/business/app.service.security');
 const PubSubService = require('../services/core/app.service.pubSub');
 const WebSocketService = require('../services/core/app.service.webSocket');
+const RQ = require('node-redis-queue');
+
+const ARENA_QUEUE_NAME = "ArenaWaitingList";
 
 class GameController {
   constructor() {}
+
+  
 
   register(apiRoutes) {
 
@@ -22,27 +27,53 @@ class GameController {
 
         // create game arena
         const arena = new PlanetDefenderCore.GameArena();
+        arena.Randomize();
 
         // store it to redis
         const service = new PubSubService.Class();
         service.store(arena.Uid, arena);
+
+        // enqueue new empty arena
+        const queue = RQ.Channel();
+        queue.attach(service.getNativeService());
+        queue.push(ARENA_QUEUE_NAME, arena.Uid);
 
         // return
         return response.json(arena);
     }));
 
     /**
-     * Game arena, Gets the first available arena not owned by the specified user
+     * Join the specified arena
      */
-    apiRoutes.post("/game/searchArena/:userId", jsonParser, BaseController.Instance.processWithAuthentication((request, response, next) => {
-       
+    apiRoutes.post("/game/joinArena", jsonParser, BaseController.Instance.processWithAuthentication((request, response, next) => {
+      return new Promise((resolve, reject) => {
+          // get redis service
+          const service = new PubSubService.Class();
+
+          // enqueue new empty arena
+          const queue = RQ.Channel();
+          queue.attach(service.getNativeService());
+
+          queue.popTimeout(ARENA_QUEUE_NAME, 1, uid => {
+            service.get(arena.Uid, arena).then(arena => {
+              response.json(arena);
+              resolve(arena);
+            })
+          });
+
+          response.json(null);
+          reject(null);
+
+      });
+
     }));
 
     /**
      * Join the specified arena
      */
-    apiRoutes.post("/game/joinArena/:arenaId", jsonParser, BaseController.Instance.processWithAuthentication((request, response, next) => {
-       
+    apiRoutes.post("/game/userStatistics/:userId", jsonParser, BaseController.Instance.processWithAuthentication((request, response, next) => {
+      
+
     }));
 
     /**
