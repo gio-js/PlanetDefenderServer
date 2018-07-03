@@ -7,7 +7,6 @@ const BaseController = require("./base/app.controller.base");
 const UserService = require('../services/business/app.service.user');
 const SecurityService = require('../services/business/app.service.security');
 const PubSubService = require('../services/core/app.service.pubSub');
-const WebSocketService = require('../services/core/app.service.webSocket');
 const RQ = require('node-redis-queue');
 
 const ARENA_QUEUE_NAME = "ArenaWaitingList";
@@ -34,7 +33,7 @@ class GameController {
         service.store(arena.Uid, arena);
 
         // enqueue new empty arena
-        const queue = RQ.Channel();
+        const queue = new RQ.Channel();
         queue.attach(service.getNativeService());
         queue.push(ARENA_QUEUE_NAME, arena.Uid);
 
@@ -51,7 +50,7 @@ class GameController {
           const service = new PubSubService.Class();
 
           // enqueue new empty arena
-          const queue = RQ.Channel();
+          const queue = new RQ.Channel();
           queue.attach(service.getNativeService());
 
           queue.popTimeout(ARENA_QUEUE_NAME, 1, uid => {
@@ -85,7 +84,6 @@ class GameController {
         // manage command collisions
 
         // send accepted or rejected by web socket
-       
     }));
 
     
