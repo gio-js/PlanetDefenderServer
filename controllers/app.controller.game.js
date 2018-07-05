@@ -59,27 +59,34 @@ class GameController {
           const queue = new RQ.Channel();
           queue.attach(service.getNativeService());
 
-          queue.popTimeout(ARENA_QUEUE_NAME, 1, uid => {
-            console.log("found arena id:" + uid);
+          try {
+            queue.popTimeout(ARENA_QUEUE_NAME, 1, uid => {
+              console.log("found arena id:" + uid);
 
-            service.get(uid).then(arena => {
-              const arenaObject = JSON.parse(arena);
-              console.log("found arena:" + arenaObject);
-              console.log("arena.Uid:" + arenaObject.Uid);
+              service.get(uid).then(arena => {
+                const arenaObject = JSON.parse(arena);
+                console.log("found arena:" + arenaObject);
+                console.log("arena.Uid:" + arenaObject.Uid);
 
-              // create game arena
-              const arenaInstance = PlanetDefenderCore.GameArenaFactory.Create(arenaObject);
-              arenaInstance.RandomizeAttacker(userId);
-              console.log("arenaInstance.Uid:" + arenaInstance.Uid);
+                // create game arena
+                const arenaInstance = PlanetDefenderCore.GameArenaFactory.Create(arenaObject);
+                arenaInstance.RandomizeAttacker(userId);
+                console.log("arenaInstance.Uid:" + arenaInstance.Uid);
 
-              // take every channel listener informed about new joined player
-              const webSocketInstance = request.app.get('webSocketInstance');
-              webSocketInstance.sendMessage(arenaInstance.Uid, PlanetDefenderCore.WEBSOCKET_EVENT_NEW_PLAYER_JOINED, JSON.stringify(arenaInstance));
+                // take every channel listener informed about new joined player
+                const webSocketInstance = request.app.get('webSocketInstance');
+                webSocketInstance.sendMessage(arenaInstance.Uid, PlanetDefenderCore.WEBSOCKET_EVENT_NEW_PLAYER_JOINED, JSON.stringify(arenaInstance));
 
-              response.json(arenaInstance);
-              resolve(arenaInstance);
-            })
-          });
+                response.json(arenaInstance);
+                resolve(arenaInstance);
+              })
+            });
+
+          } catch(ex) {
+
+            console.error("pop arena error -------------------------");
+            console.error(ex);
+          }
 
       });
 
