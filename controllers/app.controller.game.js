@@ -39,7 +39,7 @@ class GameController {
 
         // create the new channel for the game
         const webSocketInstance = request.app.get('webSocketInstance');
-        ws.createChannel(arena.Uid);
+        webSocketInstance.createChannel(arena.Uid);
 
         // return
         return response.json(arena);
