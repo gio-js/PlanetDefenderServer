@@ -3,6 +3,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const serviceConst = require('./const/app.const.service');
 const webSocket = require('./services/core/app.service.webSocket');
+const PubSubService = require('./services/core/app.service.pubSub');
 const http = require('http');
 const cors = require('cors')
 

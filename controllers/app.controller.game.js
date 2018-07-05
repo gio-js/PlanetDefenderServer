@@ -4,7 +4,6 @@ const jsonParser = bodyParser.json();
 const PlanetDefenderCore = require('planet-defender-core');
 const BaseController = require("./base/app.controller.base");
 const GameService = require('../services/business/app.service.game');
-const PubSubService = require('../services/core/app.service.pubSub');
 const RQ = require('node-redis-queue');
 const UserStatisticsService = require('../services/business/app.service.userStatistics');
 
