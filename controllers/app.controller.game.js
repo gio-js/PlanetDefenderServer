@@ -160,8 +160,6 @@ class GameController {
             // clients dispose
             redisService.dispose();
             gameService.dispose();
-          }).catch(err => {
-            redisService.dispose();
           });
           
     //   })
