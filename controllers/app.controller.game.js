@@ -6,8 +6,6 @@ const BaseController = require("./base/app.controller.base");
 const GameService = require('../services/business/app.service.game');
 const PubSubService = require('../services/core/app.service.pubSub');
 const RQ = require('node-redis-queue');
-const redisMutex = require("redis-mutex");
-const runWithMutex = redisMutex.runWithMutex;
 const UserStatisticsService = require('../services/business/app.service.userStatistics');
 
 const ARENA_QUEUE_NAME = "ArenaWaitingList";
@@ -117,16 +115,16 @@ class GameController {
       const gameService = new GameService.Class();
       const redisService = new PubSubService.Class();
 
-      return runWithMutex({
-          intervalTime: 2000,
-          renewTime: 100,
-          maxTime: 1000,
-          key: "notifyCommand",
-          redisClient: redisService.getNativeService(),
-          attempts: 1
-      }, function(cb) {
+      // return runWithMutex({
+      //     intervalTime: 2000,
+      //     renewTime: 100,
+      //     maxTime: 1000,
+      //     key: "notifyCommand",
+      //     redisClient: redisService.getNativeService(),
+      //     attempts: 1
+      // }, function(cb) {
 
-        redisService
+        return redisService
           .get(command.ArenaUid)
           .then(arena => {
             const arenaObject = JSON.parse(arena);
@@ -151,20 +149,20 @@ class GameController {
     
             response.json(true);
 
-          })
+          });
           
-      })
-      .then(function() {
-        response.json(true);
+    //   })
+    //   .then(function() {
+    //     response.json(true);
 
-      }, function() {
-          next(new Error("unable to acquire lock for notify command"));
+    //   }, function() {
+    //       next(new Error("unable to acquire lock for notify command"));
 
-      });
+    //   });
 
-    }));
-    
-  }
+      }));
+    }
+
 }
 
 exports.Class = GameController;
