@@ -4,7 +4,7 @@ class WebSocketService {
 
     constructor(server) {
         this.service = socketIO(server);
-        this.channels = {}; // dictionary of <channelId, io.Namespace>
+        // this.channels = {}; // dictionary of <channelId, io.Namespace>
         this.messageCallback = null;
     }
 
@@ -26,28 +26,28 @@ class WebSocketService {
                 console.log('socket disconnected: ' + socket.id); // remove closure
             });
 
-            socket.on('message', (message) => {
-                console.log('Received message ', from);
+            // socket.on('message', (message) => {
+            //     console.log('Received message ', from);
 
-                if (this.messageCallback) {
-                    this.messageCallback(channelId, message);
-                }
-            });
+            //     if (this.messageCallback) {
+            //         this.messageCallback(channelId, message);
+            //     }
+            // });
         });
 
-        this.channels[channelId] = namespaceChannel;
+        // this.channels[channelId] = namespaceChannel;
     }
 
     /**
      * Send message to the specified channel
      */
     sendMessage(channelId, eventName, message) {
-        var namespaceChannel = this.channels[channelId];
-        if (!namespaceChannel) {
-            throw new Error("Namespace channel not found.");
-        }
+        // var namespaceChannel = this.channels[channelId];
+        // if (!namespaceChannel) {
+        //     throw new Error("Namespace channel not found.");
+        // }
 
-        namespaceChannel.emit(eventName, message);
+        this.service.of('/' + channelId).emit(eventName, message);
     }
 
     /**
@@ -66,7 +66,7 @@ class WebSocketService {
             this.service.close();
             this.service = null;
         }
-        this.channels = null;
+        // this.channels = null;
         this.messageCallback = null;
     }
 
