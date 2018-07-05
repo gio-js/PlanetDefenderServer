@@ -62,7 +62,7 @@ class GameController {
           queue.popTimeout(ARENA_QUEUE_NAME, 1, uid => {
             console.log("found arena id:" + uid);
 
-            service.get(arena.Uid, arena).then(arena => {
+            service.get(uid).then(arena => {
               console.log("found arena:" + arena);
 
               // create game arena
