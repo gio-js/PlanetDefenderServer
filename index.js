@@ -27,12 +27,12 @@ const webSocketInstance = new webSocket.Class(httpServer);
 // ws.createChannel('test');
 app.set('webSocketInstance', webSocketInstance);
 
-/**
- * Redis
- */
-// get redis service
-const redisServiceInstance = new PubSubService.Class();
-app.set('redisService', redisServiceInstance);
+// /**
+//  * Redis
+//  */
+// // get redis service
+// const redisServiceInstance = new PubSubService.Class();
+// app.set('redisService', redisServiceInstance);
 
 /**
  * Base default
