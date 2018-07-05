@@ -10,24 +10,6 @@ class PubSubService {
     }
 
     /**
-     * Channel subscribe
-     */
-    subscribe(channelId, messageCallback) {
-        this.service.subscribe(channelId);
-        this.service.on("message", (channel, message) => {
-            if (messageCallback)
-                messageCallback(message);
-        });
-    }
-
-    /**
-     * Publish a new channel message
-     */
-    publish(channelId, message) {
-        this.service.publish(channelId, message);
-    }
-
-    /**
      * Store data by id
      */
     store(id, dataObject) {
