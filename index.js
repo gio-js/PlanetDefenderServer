@@ -24,7 +24,6 @@ const GameController = require('./controllers/app.controller.game');
  * Websocket
  */
 const webSocketInstance = new webSocket.Class(httpServer);
-// ws.createChannel('test');
 app.set('webSocketInstance', webSocketInstance);
 
 /**
