@@ -22,6 +22,7 @@ class UsersController {
       const security = new SecurityService.Class();
 
       return service.getUserByEmail(email).then(user => {
+        console.log('user redis get: ', user);
 
         if (user == null) {
           return service
