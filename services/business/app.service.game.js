@@ -70,13 +70,13 @@ class GameService {
                         return;
                     }
 
-                    let index = gameArena.Defender.Tanks.findIndex(b => b.Uid === targetElement.Uid);
+                    index = gameArena.Defender.Tanks.findIndex(b => b.Uid === targetElement.Uid);
                     if (index >= 0) {
                         gameArena.Tanks.Buildings.splice(index, 1);
                         return;
                     }
 
-                    let index = gameArena.Attacker.Tanks.findIndex(b => b.Uid === targetElement.Uid);
+                    index = gameArena.Attacker.Tanks.findIndex(b => b.Uid === targetElement.Uid);
                     if (index >= 0) {
                         gameArena.Attacker.Tanks.splice(index, 1);
                         return;
