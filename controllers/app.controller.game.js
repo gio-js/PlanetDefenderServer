@@ -83,8 +83,6 @@ class GameController {
                 response.json(arenaInstance);
                 resolve(arenaInstance);
               })
-            }).catch(err => {
-              service.dispose();
             });
 
           } catch(ex) {
@@ -160,10 +158,10 @@ class GameController {
             // clients dispose
             redisService.dispose();
             gameService.dispose();
+          }).catch(err => {
+            redisService.dispose();
           });
-          
-    //   })
-    //   .then(function() {
+           function() {
     //     response.json(true);
 
     //   }, function() {
