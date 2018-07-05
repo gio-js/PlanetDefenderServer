@@ -41,7 +41,6 @@ class GameController {
         webSocketInstance.createChannel(arena.Uid);
 
         service.dispose();
-        service = null;
 
         // return
         return response.json(arena);
@@ -83,7 +82,6 @@ class GameController {
                 resolve(arenaInstance);
 
                 service.dispose();
-                service = null;
               })
             });
 
@@ -108,7 +106,6 @@ class GameController {
         response.json(stats);
 
         service.dispose();
-        service = null;
 
       });
 
@@ -160,9 +157,7 @@ class GameController {
 
             // clients dispose
             redisService.dispose();
-            redisService = null;
             gameService.dispose();
-            gameService = null;
           });
           
     //   })

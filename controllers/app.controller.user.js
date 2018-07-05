@@ -24,7 +24,7 @@ class UsersController {
       return service.getUserByEmail(email).then(user => {
         console.log('user redis get: ', user);
 
-        if (user == null) {
+        if (user == null || user.length === 0) {
           return service
                 .register(email, password)
                 .then(function(user) {
@@ -66,26 +66,6 @@ class UsersController {
         });
     }));
 
-    /**
-     * Users, Delete
-     */
-    apiRoutes.delete("/users/:id", jsonParser, BaseController.Instance.processWithAuthentication((request, response, next) => {
-      var id = request.params.id;
-
-      const service = new UserService.Class();
-      return service
-        .deleteUser(id)
-        .then(function() {
-          service.dispose();
-
-          return response.json(true);
-        })
-        .catch(function(error) {
-          service.dispose();
-
-          return next(error);
-        });
-    }));
   }
 }
 

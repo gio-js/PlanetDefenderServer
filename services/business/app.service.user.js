@@ -57,28 +57,8 @@ class UserService {
             .connect()
             .then(function (database) {
 
-                const user = new PlanetDefenderCore.User();
-                user.Email = email;
-
                 // Insert a single document
-                return database.collection(DalConst.DAL_USERS_COLLECTION).findOne(user);
-
-            });
-    }
-
-    /**
-     * Deletes the specified user
-     */
-    deleteUser(id) {
-        return this.service
-            .connect()
-            .then(function (database) {
-
-                const user = new User();
-                user.id = id;
-
-                // Insert a single document
-                return database.collection(DalConst.DAL_USERS_COLLECTION).deleteOne(user);
+                return database.collection(DalConst.DAL_USERS_COLLECTION).find({ 'Email' : email }).toArray();
 
             });
     }
@@ -88,6 +68,7 @@ class UserService {
      */
     dispose() {
         if (this.service) {
+            this.service.client.close();
             this.service.dispose();
             this.service = null;
         }
