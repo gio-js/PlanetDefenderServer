@@ -40,6 +40,9 @@ class GameController {
         const webSocketInstance = request.app.get('webSocketInstance');
         webSocketInstance.createChannel(arena.Uid);
 
+        service.dispose();
+        service = null;
+
         // return
         return response.json(arena);
     }));
@@ -78,6 +81,9 @@ class GameController {
 
                 response.json(arenaInstance);
                 resolve(arenaInstance);
+
+                service.dispose();
+                service = null;
               })
             });
 
@@ -100,6 +106,9 @@ class GameController {
 
       return service.getStatistics(userId).then(stats => {
         response.json(stats);
+
+        service.dispose();
+        service = null;
 
       });
 
@@ -149,6 +158,11 @@ class GameController {
     
             response.json(true);
 
+            // clients dispose
+            redisService.dispose();
+            redisService = null;
+            gameService.dispose();
+            gameService = null;
           });
           
     //   })
