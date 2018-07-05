@@ -40,6 +40,8 @@ class GameController {
         const webSocketInstance = request.app.get('webSocketInstance');
         webSocketInstance.createChannel(arena.Uid);
 
+        service.dispose();
+
         // return
         return response.json(arena);
     }));
@@ -76,9 +78,13 @@ class GameController {
                 // take every channel listener informed about new joined player
                 webSocketInstance.sendMessage(arenaInstance.Uid, PlanetDefenderCore.WEBSOCKET_EVENT_NEW_PLAYER_JOINED, JSON.stringify(arenaInstance));
 
+                service.dispose();
+
                 response.json(arenaInstance);
                 resolve(arenaInstance);
               })
+            }).catch(err => {
+              service.dispose();
             });
 
           } catch(ex) {
@@ -152,7 +158,10 @@ class GameController {
             response.json(true);
 
             // clients dispose
+            redisService.dispose();
             gameService.dispose();
+          }).catch(err => {
+            redisService.dispose();
           });
           
     //   })
