@@ -22,7 +22,7 @@ class GameController {
      * Game arena, Create
      */
     apiRoutes.get("/game/createArena/:userId", jsonParser, BaseController.Instance.processWithAuthentication((request, response, next) => {
-        var userId = request.params.userId;
+        const userId = request.params.userId;
 
         // create game arena
         const arena = new PlanetDefenderCore.GameArena();
@@ -48,8 +48,10 @@ class GameController {
     /**
      * Join the specified arena
      */
-    apiRoutes.post("/game/joinArena", jsonParser, BaseController.Instance.processWithAuthentication((request, response, next) => {
+    apiRoutes.get("/game/joinArena/:userId", jsonParser, BaseController.Instance.processWithAuthentication((request, response, next) => {
       return new Promise((resolve, reject) => {
+          const userId = request.params.userId;
+
           // get redis service
           const service = new PubSubService.Class();
 
@@ -60,12 +62,17 @@ class GameController {
           queue.popTimeout(ARENA_QUEUE_NAME, 1, uid => {
             service.get(arena.Uid, arena).then(arena => {
 
+              // create game arena
+              const factory = new PlanetDefenderCore.GameArenaFactory();
+              const arenaInstance = factory.Create(arena);
+              arenaInstance.RandomizeAttacker(userId);
+
               // take every channel listener informed about new joined player
               const webSocketInstance = request.app.get('webSocketInstance');
-              webSocketInstance.sendMessage(arena.Uid, PlanetDefenderCore.WEBSOCKET_EVENT_NEW_PLAYER_JOINED, arena);
+              webSocketInstance.sendMessage(arenaInstance.Uid, PlanetDefenderCore.WEBSOCKET_EVENT_NEW_PLAYER_JOINED, arenaInstance);
 
-              response.json(arena);
-              resolve(arena);
+              response.json(arenaInstance);
+              resolve(arenaInstance);
             })
           });
 
