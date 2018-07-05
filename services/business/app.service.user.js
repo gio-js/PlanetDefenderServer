@@ -52,6 +52,23 @@ class UserService {
     /**
      * Deletes the specified user
      */
+    getUserByEmail(email) {
+        return this.service
+            .connect()
+            .then(function (database) {
+
+                const user = new User();
+                user.Email = email;
+
+                // Insert a single document
+                return database.collection(DalConst.DAL_USERS_COLLECTION).findOne(user);
+
+            });
+    }
+
+    /**
+     * Deletes the specified user
+     */
     deleteUser(id) {
         return this.service
             .connect()

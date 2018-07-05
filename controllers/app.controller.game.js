@@ -119,6 +119,8 @@ class GameController {
         }
         webSocketInstance.sendMessage(command.ArenaUid, PlanetDefenderCore.WEBSOCKET_COMMAND_ACCEPTED, command);
 
+        response.json(true);
+
     }));
 
     

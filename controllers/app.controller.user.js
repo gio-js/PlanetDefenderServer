@@ -20,20 +20,30 @@ class UsersController {
 
       const service = new UserService.Class();
       const security = new SecurityService.Class();
+
+      return service.getUserByEmail(email).then(user => {
+
+        if (user == null) {
+          return service
+                .register(email, password)
+                .then(function(user) {
+                  service.dispose();
+
+                  return response.json(security.generateTokenInfo(user));
+                })
+                .catch(function(error) {
+                  service.dispose();
+                  security.dispose();
+
+                  return next(error);
+                });
+        }
+
+        next(new Error("user already exists"));
+        
+      })
       
-      return service
-        .register(email, password)
-        .then(function(user) {
-          service.dispose();
-
-          return response.json(security.generateTokenInfo(user));
-        })
-        .catch(function(error) {
-          service.dispose();
-          security.dispose();
-
-          return next(error);
-        });
+      
     }));
 
     /**
