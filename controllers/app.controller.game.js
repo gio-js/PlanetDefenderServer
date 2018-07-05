@@ -106,7 +106,7 @@ class GameController {
         if (accepted === false) {
           message = PlanetDefenderCore.WEBSOCKET_COMMAND_REJECTED;
         }
-        webSocketInstance.sendMessage(arena.Uid, PlanetDefenderCore.WEBSOCKET_COMMAND_ACCEPTED, command);
+        webSocketInstance.sendMessage(command.ArenaUid, PlanetDefenderCore.WEBSOCKET_COMMAND_ACCEPTED, command);
 
     }));
 
