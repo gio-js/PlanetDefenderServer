@@ -4,7 +4,6 @@ const jsonParser = bodyParser.json();
 const PlanetDefenderCore = require('planet-defender-core');
 const BaseController = require("./base/app.controller.base");
 const GameService = require('../services/business/app.service.game');
-const PubSubService = require('../services/core/app.service.pubSub');
 const RQ = require('node-redis-queue');
 const UserStatisticsService = require('../services/business/app.service.userStatistics');
 
@@ -28,7 +27,7 @@ class GameController {
         arena.Randomize(userId);
 
         // store it to redis
-        const service = new PubSubService.Class();
+        const service = request.app.get("redisService");
         service.store(arena.Uid, arena);
 
         // enqueue new empty arena
@@ -52,8 +51,7 @@ class GameController {
           const userId = request.params.userId;
 
           // get redis service
-          const service = new PubSubService.Class();
-          const webSocketInstance = request.app.get('webSocketInstance');
+          const service = request.app.get("redisService");
 
           // dequeue empty arena
           const queue = new RQ.Channel();
@@ -74,6 +72,7 @@ class GameController {
                 console.log("arenaInstance.Uid:" + arenaInstance.Uid);
 
                 // take every channel listener informed about new joined player
+                const webSocketInstance = request.app.get('webSocketInstance');
                 webSocketInstance.sendMessage(arenaInstance.Uid, PlanetDefenderCore.WEBSOCKET_EVENT_NEW_PLAYER_JOINED, JSON.stringify(arenaInstance));
 
                 response.json(arenaInstance);
@@ -115,7 +114,7 @@ class GameController {
       let command = request.body.command;
       // console.log(command);
       const gameService = new GameService.Class();
-      const redisService = new PubSubService.Class();
+      const redisService = request.app.get("redisService");
 
       // return runWithMutex({
       //     intervalTime: 2000,
