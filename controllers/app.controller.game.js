@@ -30,7 +30,7 @@ class GameController {
 
         // store it to redis
         const service = new PubSubService.Class();
-        service.store(arena.Uid, JSON.stringify(arena));
+        service.store(arena.Uid, arena);
 
         // enqueue new empty arena
         const queue = new RQ.Channel();
@@ -63,12 +63,12 @@ class GameController {
             console.log("found arena id:" + uid);
 
             service.get(uid).then(arena => {
-              arena = JSON.parse(arena);
-              console.log("found arena:" + arena);
-              console.log("arena.Uid:" + arena.Uid);
+              const arenaObject = JSON.parse(arena);
+              console.log("found arena:" + arenaObject);
+              console.log("arena.Uid:" + arenaObject.Uid);
 
               // create game arena
-              const arenaInstance = PlanetDefenderCore.GameArenaFactory.Create(arena);
+              const arenaInstance = PlanetDefenderCore.GameArenaFactory.Create(arenaObject);
               arenaInstance.RandomizeAttacker(userId);
               console.log("arenaInstance.Uid:" + arenaInstance.Uid);
 
