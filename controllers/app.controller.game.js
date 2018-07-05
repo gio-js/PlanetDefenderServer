@@ -66,8 +66,7 @@ class GameController {
               console.log("found arena:" + arena);
 
               // create game arena
-              const factory = new PlanetDefenderCore.GameArenaFactory();
-              const arenaInstance = factory.Create(arena);
+              const arenaInstance = PlanetDefenderCore.GameArenaFactory.Create(arena);
               arenaInstance.RandomizeAttacker(userId);
 
               // take every channel listener informed about new joined player
