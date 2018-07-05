@@ -53,7 +53,7 @@ class PubSubService {
      */
     dispose() {
         if (this.service) {
-            this.service.dispose();
+            this.service.quit();
             this.service = null;
         }
     }
