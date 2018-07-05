@@ -60,7 +60,10 @@ class GameController {
           queue.attach(service.getNativeService());
 
           queue.popTimeout(ARENA_QUEUE_NAME, 1, uid => {
+            console.log("found arena id:" + uid);
+
             service.get(arena.Uid, arena).then(arena => {
+              console.log("found arena:" + arena);
 
               // create game arena
               const factory = new PlanetDefenderCore.GameArenaFactory();
@@ -75,9 +78,6 @@ class GameController {
               resolve(arenaInstance);
             })
           });
-
-          response.json(null);
-          reject(null);
 
       });
 
