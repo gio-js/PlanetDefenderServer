@@ -1,5 +1,4 @@
 
-const express = require('express');
 const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
 const PlanetDefenderCore = require('planet-defender-core');
@@ -8,7 +7,6 @@ const GameService = require('../services/business/app.service.game');
 const PubSubService = require('../services/core/app.service.pubSub');
 const RQ = require('node-redis-queue');
 const UserStatisticsService = require('../services/business/app.service.userStatistics');
-const app = express();
 
 const ARENA_QUEUE_NAME = "ArenaWaitingList";
 
@@ -41,9 +39,7 @@ class GameController {
         // create the new channel for the game
         const webSocketInstance = request.app.get('webSocketInstance');
         webSocketInstance.createChannel(arena.Uid);
-
-        // update server instance
-        app.set('webSocketInstance', webSocketInstance);
+        
 
         service.dispose();
 
