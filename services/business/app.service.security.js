@@ -51,7 +51,7 @@ class SecurityService {
      */
     generateTokenInfo(user) {
         const payload = {
-            admin: user.UserName 
+            admin: user.Email 
         };
 
         var token = jwt.sign(payload, serviceConst.AUTH_TOKEN_SECRET, {
@@ -60,7 +60,7 @@ class SecurityService {
 
         const authInfo = new PlanetDefenderCore.AuthenticationInfo();
         authInfo.UserId = user._id;
-        authInfo.UserName = user.UserName;
+        authInfo.UserName = user.Email;
         authInfo.AuthenticationToken = token;
         return authInfo;
     }

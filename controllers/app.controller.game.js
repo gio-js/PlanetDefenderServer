@@ -37,6 +37,10 @@ class GameController {
         queue.attach(service.getNativeService());
         queue.push(ARENA_QUEUE_NAME, arena.Uid);
 
+        // create the new channel for the game
+        const webSocketInstance = req.app.get('webSocketInstance');
+        ws.createChannel(arena.Uid);
+
         // return
         return response.json(arena);
     }));
@@ -49,12 +53,17 @@ class GameController {
           // get redis service
           const service = new PubSubService.Class();
 
-          // enqueue new empty arena
+          // dequeue empty arena
           const queue = new RQ.Channel();
           queue.attach(service.getNativeService());
 
           queue.popTimeout(ARENA_QUEUE_NAME, 1, uid => {
             service.get(arena.Uid, arena).then(arena => {
+
+              // take every channel listener informed about new joined player
+              const webSocketInstance = req.app.get('webSocketInstance');
+              webSocketInstance.sendMessage(arena.Uid, PlanetDefenderCore.WEBSOCKET_EVENT_NEW_PLAYER_JOINED, arena);
+
               response.json(arena);
               resolve(arena);
             })
@@ -82,8 +91,17 @@ class GameController {
         let command = request.body.command;
 
         // manage command collisions
+        let accepted = true;
 
         // send accepted or rejected by web socket
+        const webSocketInstance = req.app.get('webSocketInstance');
+
+        let message = PlanetDefenderCore.WEBSOCKET_COMMAND_ACCEPTED;
+        if (accepted === false) {
+          message = PlanetDefenderCore.WEBSOCKET_COMMAND_REJECTED;
+        }
+        webSocketInstance.sendMessage(arena.Uid, PlanetDefenderCore.WEBSOCKET_COMMAND_ACCEPTED, command);
+        
     }));
 
     
