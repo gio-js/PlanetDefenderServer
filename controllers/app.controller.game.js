@@ -95,6 +95,7 @@ class GameController {
      */
     apiRoutes.post("/game/notifyCommand", jsonParser, BaseController.Instance.processWithAuthentication((request, response, next) => {
         let command = request.body.command;
+        console.log(command);
 
         // manage command collisions
         let accepted = true;
