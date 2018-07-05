@@ -67,7 +67,7 @@ class GameController {
               console.log("arena.Uid:" + arena.Uid);
 
               // create game arena
-              const arenaInstance = PlanetDefenderCore.GameArenaFactory.Create(JSON.parse(arena));
+              const arenaInstance = PlanetDefenderCore.GameArenaFactory.Create(arena);
               arenaInstance.RandomizeAttacker(userId);
               console.log("arenaInstance.Uid:" + arena.Uid);
 
