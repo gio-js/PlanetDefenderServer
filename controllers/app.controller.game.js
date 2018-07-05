@@ -38,7 +38,7 @@ class GameController {
         queue.push(ARENA_QUEUE_NAME, arena.Uid);
 
         // create the new channel for the game
-        const webSocketInstance = req.app.get('webSocketInstance');
+        const webSocketInstance = request.app.get('webSocketInstance');
         ws.createChannel(arena.Uid);
 
         // return
@@ -61,7 +61,7 @@ class GameController {
             service.get(arena.Uid, arena).then(arena => {
 
               // take every channel listener informed about new joined player
-              const webSocketInstance = req.app.get('webSocketInstance');
+              const webSocketInstance = request.app.get('webSocketInstance');
               webSocketInstance.sendMessage(arena.Uid, PlanetDefenderCore.WEBSOCKET_EVENT_NEW_PLAYER_JOINED, arena);
 
               response.json(arena);
@@ -94,14 +94,14 @@ class GameController {
         let accepted = true;
 
         // send accepted or rejected by web socket
-        const webSocketInstance = req.app.get('webSocketInstance');
+        const webSocketInstance = request.app.get('webSocketInstance');
 
         let message = PlanetDefenderCore.WEBSOCKET_COMMAND_ACCEPTED;
         if (accepted === false) {
           message = PlanetDefenderCore.WEBSOCKET_COMMAND_REJECTED;
         }
         webSocketInstance.sendMessage(arena.Uid, PlanetDefenderCore.WEBSOCKET_COMMAND_ACCEPTED, command);
-        
+
     }));
 
     
