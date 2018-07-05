@@ -145,7 +145,7 @@ class GameController {
             webSocketInstance.sendMessage(command.ArenaUid, PlanetDefenderCore.WEBSOCKET_COMMAND_ACCEPTED, command);
 
             // store updated game arena snapshot
-            service.store(arenaInstance.Uid, arenaInstance);
+            redisService.store(arenaInstance.Uid, arenaInstance);
     
             response.json(true);
 
