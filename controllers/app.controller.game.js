@@ -161,7 +161,7 @@ class GameController {
           }).catch(err => {
             redisService.dispose();
           });
-           function() {
+          //  function() {
     //     response.json(true);
 
     //   }, function() {
