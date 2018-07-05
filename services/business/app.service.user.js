@@ -57,7 +57,7 @@ class UserService {
             .connect()
             .then(function (database) {
 
-                const user = new User();
+                const user = new PlanetDefenderCore.User();
                 user.Email = email;
 
                 // Insert a single document

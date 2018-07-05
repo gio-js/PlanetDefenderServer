@@ -1,13 +1,14 @@
 
 const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
-
 const PlanetDefenderCore = require('planet-defender-core');
 const BaseController = require("./base/app.controller.base");
-const UserService = require('../services/business/app.service.user');
-const SecurityService = require('../services/business/app.service.security');
+const GameService = require('../services/business/app.service.game');
 const PubSubService = require('../services/core/app.service.pubSub');
 const RQ = require('node-redis-queue');
+const redisMutex = require("redis-mutex");
+const runWithMutex = redisMutex.runWithMutex;
+const UserStatisticsService = require('../../services/business/app.service.userStatistics');
 
 const ARENA_QUEUE_NAME = "ArenaWaitingList";
 
@@ -96,7 +97,13 @@ class GameController {
      * Join the specified arena
      */
     apiRoutes.post("/game/userStatistics/:userId", jsonParser, BaseController.Instance.processWithAuthentication((request, response, next) => {
-      
+      const userId = request.params.userId;
+      const service = new UserStatisticsService.Class();
+
+      return service.getStatistics(userId).then(stats => {
+        response.json(stats);
+
+      });
 
     }));
 
@@ -104,25 +111,57 @@ class GameController {
      * Join the specified arena
      */
     apiRoutes.post("/game/notifyCommand", jsonParser, BaseController.Instance.processWithAuthentication((request, response, next) => {
-        let command = request.body.command;
-        console.log(command);
 
-        // manage command collisions
-        let accepted = true;
+      let command = request.body.command;
+      // console.log(command);
+      const gameService = new GameService.Class();
+      const redisService = new PubSubService.Class();
 
-        // send accepted or rejected by web socket
-        const webSocketInstance = request.app.get('webSocketInstance');
+      return runWithMutex({
+          intervalTime: 2000,
+          renewTime: 100,
+          maxTime: 1000,
+          key: "notifyCommand",
+          redisClient: redisService.getNativeService()
+      }, function(cb) {
 
-        let message = PlanetDefenderCore.WEBSOCKET_COMMAND_ACCEPTED;
-        if (accepted === false) {
-          message = PlanetDefenderCore.WEBSOCKET_COMMAND_REJECTED;
-        }
-        webSocketInstance.sendMessage(command.ArenaUid, PlanetDefenderCore.WEBSOCKET_COMMAND_ACCEPTED, command);
+        redisService
+          .get(command.ArenaUid)
+          .then(arena => {
+            const arenaObject = JSON.parse(arena);
 
+            // create game arena
+            const arenaInstance = PlanetDefenderCore.GameArenaFactory.Create(arenaObject);
+
+            // manage command collisions
+            let accepted = gameService.manageCommand(arenaInstance, command);
+
+            // send accepted or rejected by web socket
+            const webSocketInstance = request.app.get('webSocketInstance');
+    
+            let message = PlanetDefenderCore.WEBSOCKET_COMMAND_ACCEPTED;
+            if (accepted === false) {
+              message = PlanetDefenderCore.WEBSOCKET_COMMAND_REJECTED;
+            }
+            webSocketInstance.sendMessage(command.ArenaUid, PlanetDefenderCore.WEBSOCKET_COMMAND_ACCEPTED, command);
+
+            // store updated game arena snapshot
+            service.store(arenaInstance.Uid, arenaInstance);
+    
+            response.json(true);
+
+          })
+          
+      })
+      .then(function() {
         response.json(true);
 
-    }));
+      }, function() {
+          next(new Error("unable to acquire lock for notify command"));
 
+      });
+
+    }));
     
   }
 }
