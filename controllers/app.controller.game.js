@@ -7,6 +7,7 @@ const GameService = require('../services/business/app.service.game');
 const PubSubService = require('../services/core/app.service.pubSub');
 const RQ = require('node-redis-queue');
 const UserStatisticsService = require('../services/business/app.service.userStatistics');
+const app = express();
 
 const ARENA_QUEUE_NAME = "ArenaWaitingList";
 
