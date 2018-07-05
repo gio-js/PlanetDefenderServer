@@ -122,7 +122,8 @@ class GameController {
           renewTime: 100,
           maxTime: 1000,
           key: "notifyCommand",
-          redisClient: redisService.getNativeService()
+          redisClient: redisService.getNativeService(),
+          attempts: 1
       }, function(cb) {
 
         redisService
