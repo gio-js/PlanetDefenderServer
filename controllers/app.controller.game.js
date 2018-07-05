@@ -28,7 +28,7 @@ class GameController {
         arena.Randomize(userId);
 
         // store it to redis
-        const service = new PubSubService.Class();
+        const service = request.app.get("redisService");
         service.store(arena.Uid, arena);
 
         // enqueue new empty arena
@@ -39,8 +39,6 @@ class GameController {
         // create the new channel for the game
         const webSocketInstance = request.app.get('webSocketInstance');
         webSocketInstance.createChannel(arena.Uid);
-
-        service.dispose();
 
         // return
         return response.json(arena);
@@ -54,7 +52,7 @@ class GameController {
           const userId = request.params.userId;
 
           // get redis service
-          const service = new PubSubService.Class();
+          const service = request.app.get("redisService");
 
           // dequeue empty arena
           const queue = new RQ.Channel();
@@ -80,8 +78,6 @@ class GameController {
 
                 response.json(arenaInstance);
                 resolve(arenaInstance);
-
-                service.dispose();
               })
             });
 
@@ -119,7 +115,7 @@ class GameController {
       let command = request.body.command;
       // console.log(command);
       const gameService = new GameService.Class();
-      const redisService = new PubSubService.Class();
+      const redisService = request.app.get("redisService");
 
       // return runWithMutex({
       //     intervalTime: 2000,
@@ -156,7 +152,6 @@ class GameController {
             response.json(true);
 
             // clients dispose
-            redisService.dispose();
             gameService.dispose();
           });
           

@@ -27,6 +27,13 @@ const webSocketInstance = new webSocket.Class(httpServer);
 app.set('webSocketInstance', webSocketInstance);
 
 /**
+ * Redis
+ */
+// get redis service
+const redisServiceInstance = new PubSubService.Class();
+app.set('redisService', redisServiceInstance);
+
+/**
  * Base default
  */
 app.get('/', function (req, res, next) {
