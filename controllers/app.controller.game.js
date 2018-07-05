@@ -8,7 +8,7 @@ const PubSubService = require('../services/core/app.service.pubSub');
 const RQ = require('node-redis-queue');
 const redisMutex = require("redis-mutex");
 const runWithMutex = redisMutex.runWithMutex;
-const UserStatisticsService = require('../../services/business/app.service.userStatistics');
+const UserStatisticsService = require('../services/business/app.service.userStatistics');
 
 const ARENA_QUEUE_NAME = "ArenaWaitingList";
 
