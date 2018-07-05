@@ -64,14 +64,16 @@ class GameController {
 
             service.get(uid).then(arena => {
               console.log("found arena:" + JSON.parse(arena));
+              console.log("arena.Uid:" + arena.Uid);
 
               // create game arena
               const arenaInstance = PlanetDefenderCore.GameArenaFactory.Create(JSON.parse(arena));
               arenaInstance.RandomizeAttacker(userId);
+              console.log("arenaInstance.Uid:" + arena.Uid);
 
               // take every channel listener informed about new joined player
               const webSocketInstance = request.app.get('webSocketInstance');
-              webSocketInstance.sendMessage(arenaInstance.Uid, PlanetDefenderCore.WEBSOCKET_EVENT_NEW_PLAYER_JOINED, arenaInstance);
+              webSocketInstance.sendMessage(arenaInstance.Uid, PlanetDefenderCore.WEBSOCKET_EVENT_NEW_PLAYER_JOINED, JSON.stringify(arenaInstance));
 
               response.json(arenaInstance);
               resolve(arenaInstance);
