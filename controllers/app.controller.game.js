@@ -142,7 +142,7 @@ class GameController {
           if (accepted === false) {
             message = PlanetDefenderCore.WEBSOCKET_COMMAND_REJECTED;
           }
-          webSocketInstance.sendMessage(command.ArenaUid, PlanetDefenderCore.WEBSOCKET_COMMAND_ACCEPTED, command);
+          webSocketInstance.sendMessage(command.ArenaUid, message, command);
 
           // store updated game arena snapshot
           redisService.store(arenaInstance.Uid, arenaInstance);
