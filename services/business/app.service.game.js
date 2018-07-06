@@ -15,6 +15,7 @@ class GameService {
     isCommandValid(gameArena, command) {
         switch(command.CommandType) {
             case PlanetDefenderCore.CommandType.Attack:
+                console.log("evaluating attack", command);
                 const attackerElement = gameArena.GetMapElementById(command.RelatedElementId);
                 const targetElement = gameArena.GetMapElementById(command.TargetElementId);
 
@@ -25,6 +26,7 @@ class GameService {
                     ) &&
                     (attackerElement.Location.Y === targetElement.Location.Y)
                 ) {
+                    console.log("command valid", command);
                     return true;
                 }
 
@@ -35,21 +37,26 @@ class GameService {
                     ) &&
                     (attackerElement.Location.X === targetElement.Location.X)
                 ) {
+                    console.log("command valid", command);
                     return true;
                 }
 
                 break;
             case PlanetDefenderCore.CommandType.Move:
+                console.log("evaluating move", command);
+
                 const targetLocation = command.TargetLocation;
                 const tileMoveTarget = gameArena.Map.getTileAt(targetLocation.X, targetLocation.Y);
 
                 if (!tileMoveTarget.Element) {
+                    console.log("command valid", command);
                     return true;
                 }
 
                 break;
         }
 
+        console.log("command not valid", command);
         return false;
     }
 
