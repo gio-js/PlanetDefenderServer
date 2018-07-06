@@ -152,7 +152,7 @@ class GameController {
           response.json(true);
         }).catch(err => {
           redisService.dispose();
-          response.json(true);
+          next(new Error("Notify command failed" + JSON.stringify(err)));
         });
 
     }));

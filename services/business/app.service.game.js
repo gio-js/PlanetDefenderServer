@@ -19,6 +19,9 @@ class GameService {
                 const attackerElement = gameArena.GetMapElementById(command.RelatedElementId);
                 const targetElement = gameArena.GetMapElementById(command.TargetElementId);
 
+                console.log("attacker element", attackerElement);
+                console.log("target element", targetElement);
+
                 if (
                     (
                         (attackerElement.Location.X === targetElement.Location.X + 1) ||
@@ -64,6 +67,8 @@ class GameService {
      * Applies the command changes on the game arena
      */
     applyCommand(gameArena, command) {
+        console.log("applying command", command);
+
         switch(command.CommandType) {
             case PlanetDefenderCore.CommandType.Attack:
                 const targetElement = gameArena.GetMapElementById(command.TargetElementId);
@@ -103,6 +108,8 @@ class GameService {
                 tileMoveTarget.Element = movingElement;
                 break;
         }
+
+        console.log("command applyed", command);
     }
 
     /**
