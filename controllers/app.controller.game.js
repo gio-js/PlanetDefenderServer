@@ -78,7 +78,9 @@ class GameController {
 
                 // take every channel listener informed about new joined player
                 webSocketInstance.sendMessage(arenaInstance.Uid, PlanetDefenderCore.WEBSOCKET_EVENT_NEW_PLAYER_JOINED, JSON.stringify(arenaInstance));
-
+              
+                // persist new player informations
+                service.store(arenaInstance.Uid, arenaInstance);
                 service.dispose();
 
                 response.json(arenaInstance);
