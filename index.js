@@ -10,6 +10,10 @@ const cors = require('cors')
 // services
 const app = express();
 const router = express.Router(); 
+
+// enable cors
+app.use(cors());
+
 const httpServer = http.Server(app);
 
 router.use(bodyParser.urlencoded({ extended: true }));
@@ -51,9 +55,10 @@ authController.register(router);
 const gameController = new GameController.Class();
 gameController.register(router);
 
-app.use(cors());
+// register routes
 app.use(serviceConst.BASE_URL_SERVICE, router);
 
+// launch server
 httpServer.listen(serviceConst.LISTENING_PORT, function(){
   console.log('listening on *:' + serviceConst.LISTENING_PORT);
 });
